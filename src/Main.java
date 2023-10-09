@@ -1,34 +1,52 @@
-import java.util.Scanner;
+import java.util.Arrays;
 
 public class Main {
 
 	public static void main(String[] args) {
 
-//		char[] fila1 = { '1', '2', '-' };
-//		char[] fila2 = invertirFila(fila1);
-//
-//		for (int i = 0; i < fila2.length; i++) {
-//			System.out.print(fila2[i] + " ");
-//		}
+		System.out.println(comprobarSudoku());
 
 	}
 
 	public static boolean comprobarSudoku() {
-		char[][] sudoku = { { '-', '-', '-', '5', '-', '9', '2', '-', '7' },
-				{ '6', '7', '-', '3', '-', '-', '-', '-', '4' }, { '-', '-', '-', '-', '2', '-', '-', '-', '-' },
-				{ '-', '4', '9', '2', '-', '-', '-', '8', '5' }, { '-', '-', '-', '-', '-', '-', '-', '-', '-' },
-				{ '2', '3', '-', '-', '-', '4', '1', '6', '-' }, { '-', '-', '-', '1', '-', '-', '-', '-', '-' },
-				{ '5', '-', '-', '-', '-', '-', '8', '9', '1' }, { '8', '-', '4', '9', '-', '7', '-', '-', '-' } };
+		char[][] sudoku = {
+	            { '-', '-', '-', '5', '-', '9', '2', '-', '7' },
+	            { '6', '7', '-', '3', '-', '-', '-', '-', '4' },
+	            { '-', '-', '-', '-', '2', '-', '-', '-', '-' },
+	            { '-', '4', '9', '2', '-', '-', '-', '8', '5' },
+	            { '-', '-', '-', '-', '-', '-', '-', '-', '-' },
+	            { '2', '3', '-', '-', '-', '4', '1', '6', '-' },
+	            { '-', '-', '-', '1', '-', '-', '-', '-', '-' },
+	            { '5', '-', '-', '-', '-', '-', '8', '9', '1' },
+	            { '8', '-', '4', '9', '-', '7', '-', '-', '-' }
+		};
 
-		boolean esCorrecto = true;
+		int contadorFilaArriba = 0;
+		int contadorFilaAbajo = 8; // (sudoku.length - 1)
+		char[] filaArriba = transformarFila(sudoku[contadorFilaArriba]);
+		char[] filaAbajo = transformarFila(invertirFila(sudoku[contadorFilaAbajo]));
 
-		int contadorUltimaFila = (sudoku.length - 1);
-		char[] filaArriba;
-		char[] filaAbajo = sudoku[contadorUltimaFila];
+		while (contadorFilaArriba < contadorFilaAbajo) {
+			if (!Arrays.equals(filaArriba, filaAbajo)) {
+				System.out.println("fila arriba:\n");
+				for (int i = 0; i < filaArriba.length; i++) {
+					System.out.print(filaArriba[i] + ",");
+				}
+				System.out.println("\ncontador fila abajo: " + contadorFilaAbajo);
+				System.out.println("\ncontador fila abajo: " + contadorFilaArriba);
+				System.out.println("\n\nfila abajo:\n");
+				for (int i = 0; i < filaAbajo.length; i++) {
+					System.out.print(filaAbajo[i] + ",");
+				}
+				return false;
+			} else if (Arrays.equals(filaArriba, filaAbajo)) {
+				contadorFilaArriba++;
+				contadorFilaAbajo--;
+				filaArriba = transformarFila(sudoku[contadorFilaArriba]);
+				filaAbajo = transformarFila(invertirFila(sudoku[contadorFilaAbajo]));
+				return true;
+			}
 
-		for (int i = 0; i < sudoku.length; i++) {
-			filaArriba = transformarFila(sudoku[i]);
-			filaAbajo = transformarFila(invertirFila(sudoku[contadorUltimaFila]));
 			
 		}
 
