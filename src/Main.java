@@ -1,53 +1,59 @@
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class Main {
 
 	public static void main(String[] args) {
 
-		System.out.println(comprobarSudoku());
+		Scanner sc = new Scanner(System.in);
+
+		System.out.println("Entrada Sudokus: ");
+		int numSudokus = sc.nextInt();
+		System.out.println(numSudokus);
+
+		sc.nextLine();
+		char[][] sudoku = new char[9][9];
+		String linea;
+
+		// veces que machacaremos el sudoku auxiliar
+		for (int i = 0; i < numSudokus; i++) {
+			sc.nextLine();
+			// tomamos toda la linea
+			for (int fil = 0; fil < sudoku.length; fil++) {
+				linea = sc.nextLine();
+				// char por char vamos formando el sudoku
+				for (int j = 0; j < linea.length(); j++) {
+					sudoku[fil][j] = linea.charAt(j);
+				}
+			}
+			if (comprobarSudoku(sudoku) && (contarCeldasRellenas(sudoku) <= 32)) {
+				System.out.println("SI");
+			} else {
+				System.out.println("NO");
+			}
+		}
+
+		sc.close();
 
 	}
 
-	public static boolean comprobarSudoku() {
-		char[][] sudoku = {
-	            { '-', '-', '-', '5', '-', '9', '2', '-', '7' },
-	            { '6', '7', '-', '3', '-', '-', '-', '-', '4' },
-	            { '-', '-', '-', '-', '2', '-', '-', '-', '-' },
-	            { '-', '4', '9', '2', '-', '-', '-', '8', '5' },
-	            { '-', '-', '-', '-', '-', '-', '-', '-', '-' },
-	            { '2', '3', '-', '-', '-', '4', '1', '6', '-' },
-	            { '-', '-', '-', '1', '-', '-', '-', '-', '-' },
-	            { '5', '-', '-', '-', '-', '-', '8', '9', '1' },
-	            { '8', '-', '4', '9', '-', '7', '-', '-', '-' }
-		};
+	public static boolean comprobarSudoku(char[][] sudoku) {
 
 		int contadorFilaArriba = 0;
-		int contadorFilaAbajo = 8; // (sudoku.length - 1)
+		int contadorFilaAbajo = (sudoku.length - 1);
 		char[] filaArriba = transformarFila(sudoku[contadorFilaArriba]);
 		char[] filaAbajo = transformarFila(invertirFila(sudoku[contadorFilaAbajo]));
 
 		while (contadorFilaArriba < contadorFilaAbajo) {
 			if (!Arrays.equals(filaArriba, filaAbajo)) {
-				System.out.println("fila arriba:\n");
-				for (int i = 0; i < filaArriba.length; i++) {
-					System.out.print(filaArriba[i] + ",");
-				}
-				System.out.println("\ncontador fila abajo: " + contadorFilaAbajo);
-				System.out.println("\ncontador fila abajo: " + contadorFilaArriba);
-				System.out.println("\n\nfila abajo:\n");
-				for (int i = 0; i < filaAbajo.length; i++) {
-					System.out.print(filaAbajo[i] + ",");
-				}
 				return false;
-			} else if (Arrays.equals(filaArriba, filaAbajo)) {
+			} else {
 				contadorFilaArriba++;
 				contadorFilaAbajo--;
 				filaArriba = transformarFila(sudoku[contadorFilaArriba]);
 				filaAbajo = transformarFila(invertirFila(sudoku[contadorFilaAbajo]));
-				return true;
 			}
 
-			
 		}
 
 		return true;
@@ -80,6 +86,23 @@ public class Main {
 		}
 
 		return filaInvertida;
+	}
+
+	public static int contarCeldasRellenas(char[][] sudoku) {
+
+		int contadorCeldasRellenas = 0;
+
+		for (int i = 0; i < sudoku.length; i++) {
+			for (int j = 0; j < sudoku[i].length; j++) {
+				if (sudoku[i][j] != '-') {
+					contadorCeldasRellenas++;
+				}
+			}
+
+		}
+
+		return contadorCeldasRellenas;
+
 	}
 
 }
